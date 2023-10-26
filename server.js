@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 const jsonData = require('./db/db.json');
 const PORT = 3000;
 
@@ -25,6 +26,7 @@ app.post('/api/notes',(req,res)=>{
         const newNote={
             title,
             text,
+            id:uuidv4(),
         };
     console.log(newNote);
     
@@ -36,7 +38,7 @@ app.post('/api/notes',(req,res)=>{
         else{
             const parsedNotes=JSON.parse(data);
             parsedNotes.push(newNote);
-            
+
             fs.writeFile('./db/db.json',JSON.stringify(parsedNotes,null,4),(writeErr)=>
             writeErr ? console.error(writeErr) : console.info("successfully added note"));
         }
@@ -46,10 +48,40 @@ app.post('/api/notes',(req,res)=>{
         body: newNote,
       };
   
-      res.json(newNote);
+      res.render('notes.html');
     } else {
       res.json('Error in posting note');
     }
+})
+
+app.delete('/api/notes/:id',(req,res)=>{
+    console.log(req.params);
+    console.log(req.body);
+    if(req.params.id){
+        // console.log(req.params.uuid);
+        const id=req.params.id;
+        console.log(id);
+        for (let i=0;i<jsonData.length;i++){
+            const deleteNote=jsonData[i];
+            console.log(deleteNote.id);
+            if(deleteNote.id===id){
+                fs.readFile('./db/db.json','utf-8',(err,data)=>{
+                    if (err){
+                        console.log(err);
+                    }
+                    else{
+                        const parsedNotes=JSON.parse(data);
+                        parsedNotes.splice(i,1);
+            
+                        fs.writeFile('./db/db.json',JSON.stringify(parsedNotes,null,4),(writeErr)=>
+                        writeErr ? console.error(writeErr) : console.info("successfully deleted note"));
+                    }
+                })   
+            }
+        }
+    
+    }
+    res.json();
 })
 
 
