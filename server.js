@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const jsonData = require('./db/db.json');
 const PORT = 3000;
 
 const app=express();
@@ -68,27 +67,36 @@ app.delete('/api/notes/:id',(req,res)=>{
         // console.log(req.params.uuid);
         const id=req.params.id;
         console.log(id);
-        for (let i=0;i<jsonData.length;i++){
-            const deleteNote=jsonData[i];
-            // console.log(deleteNote.id);
-            if(deleteNote.id===id){
-                fs.readFile('./db/db.json','utf-8',(err,data)=>{
-                    if (err){
-                        console.log(err);
-                    }
-                    else{
-                        const parsedNotes=JSON.parse(data);
-                        parsedNotes.splice(i,1);
+        fs.readFile('./db/db.json','utf-8',(err,data)=>{
+            if (err){
+                console.log(err);
+            }
+            else{
+                const parsedNotes=JSON.parse(data);
+                const result=parsedNotes.filter((notes) => notes.id!==id)
+    
+                fs.writeFile('./db/db.json',JSON.stringify(result,null,4),(writeErr)=>
+                writeErr ? console.error(writeErr) : console.info("successfully deleted note"));
+                res.json(`Note ${id} has been deleted`)
+            }
+        // for (let i=0;i<jsonData.length;i++){
+        //     const deleteNote=jsonData[i];
+        //     // console.log(deleteNote.id);
+        //     if(deleteNote.id===id){
+        //         fs.readFile('./db/db.json','utf-8',(err,data)=>{
+        //             if (err){
+        //                 console.log(err);
+        //             }
+        //             else{
+        //                 const parsedNotes=JSON.parse(data);
+        //                 parsedNotes.splice(i,1);
+        //                 console.log(parsedNotes);
             
-                        fs.writeFile('./db/db.json',JSON.stringify(parsedNotes,null,4),(writeErr)=>
-                        writeErr ? console.error(writeErr) : console.info("successfully deleted note"));
-                    }
+        //                 fs.writeFile('./db/db.json',JSON.stringify(parsedNotes,null,4),(writeErr)=>
+        //                 writeErr ? console.error(writeErr) : console.info("successfully deleted note"));
+        //             }
                 })   
             }
-        }
-    
-    }
-    res.json();
 })
 
 app.get('*',(req,res)=>res.sendFile(path.join(__dirname,'/public/index.html')))
