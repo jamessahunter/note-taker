@@ -10,14 +10,14 @@
 
 ## Description
 
-[Link to Walkthough Video](https://drive.google.com/file/d/18VTG7axoy0PpSfliWl9esiwJpwGxdNFX/view)
+[![DEPLOY](https://img.shields.io/badge/DEPLOY-%E2%9C%93-brightgreen)](https://note-taker-james-hunter-c1a6bb9680a3.herokuapp.com/)
 
- This project allows the user to create notes with a title and text. The user is also able to delete notes. The notes also remain persistant on the page even after a refresh. This was created using Express.js. This project taught me how to use .get, .post, and .delete to retrieve data, post data and delete data from a file on a server. This also us the built in library of File System to write to the file. This also use UUID to generate an id for each note
+ This project allows the user to create notes with a title and text. The user is also able to delete notes. The notes also remain persistant on the page even after a refresh. This was created using Express.js. This project taught me how to use .get, .post, and .delete to retrieve data, post data and delete data from a file on a server. This also us the built in library of File System to write to the file. This also use UUID to generate a unique id for each note.
 
 
 ## Usage
 
-![Usage Example](./assets/Logo%20Maker.gif)
+![Usage Example](./public/assets/Note%20Taker.gif)
 
 ## Learning Points
 
